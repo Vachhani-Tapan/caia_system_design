@@ -4,7 +4,9 @@ const {
     getConcepts,
     getConcept,
     createConcept,
-    updateConcept
+    updateConcept,
+    patchConcept,
+    deleteConcept
 } = require('../controllers/conceptController');
 
 // ============================================================
@@ -26,5 +28,13 @@ router.post('/api/v1/concepts', createConcept);
 // @route   PUT /api/v1/concepts/:id
 // @desc    Replace complete concept
 router.put('/api/v1/concepts/:id', updateConcept);
+
+// @route   PATCH /api/v1/concepts/:id
+// @desc    Update specific concept fields
+router.patch('/api/v1/concepts/:id', patchConcept);
+
+// @route   DELETE /api/v1/concepts/:id
+// @desc    Delete concept record
+router.delete('/api/v1/concepts/:id', deleteConcept);
 
 module.exports = router;
