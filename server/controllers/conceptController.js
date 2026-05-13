@@ -79,3 +79,36 @@ exports.createConcept = async (req, res) => {
     });
   }
 };
+
+// ============================================================
+// ROUTE #4: Replace complete concept
+// METHOD: PUT
+// ENDPOINT: /api/v1/concepts/:id
+// ============================================================
+exports.updateConcept = async (req, res) => {
+  try {
+    const concept = await Concept.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+      overwrite: true // This ensures a complete replacement of the document
+    });
+
+    if (!concept) {
+      return res.status(404).json({
+        success: false,
+        error: 'Concept not found'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Concept replaced successfully',
+      data: concept
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server Error: Could not replace concept'
+    });
+  }
+};
