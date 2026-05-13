@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const {
     getConcepts,
-    getConcept
+    getConcept,
+    createConcept
 } = require('../controllers/conceptController');
 
 // ============================================================
@@ -16,5 +17,9 @@ router.get('/api/v1/concepts', getConcepts);
 // @route   GET /api/v1/concepts/:id
 // @desc    Fetch single concept
 router.get('/api/v1/concepts/:id', getConcept);
+
+// @route   POST /api/v1/concepts
+// @desc    Create new concept
+router.post('/api/v1/concepts', createConcept);
 
 module.exports = router;
