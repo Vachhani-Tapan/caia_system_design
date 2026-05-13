@@ -5,7 +5,7 @@ const Concept = require('../models/Concept');
 // METHOD: GET
 // ENDPOINT: /api/v1/concepts
 // ============================================================
-exports.getConcepts = async (req, res) => {
+const getConcepts = async (req, res) => {
   try {
     const concepts = await Concept.find();
 
@@ -27,7 +27,7 @@ exports.getConcepts = async (req, res) => {
 // METHOD: GET
 // ENDPOINT: /api/v1/concepts/:id
 // ============================================================
-exports.getConcept = async (req, res) => {
+const getConcept = async (req, res) => {
   try {
     const concept = await Concept.findById(req.params.id);
 
@@ -55,7 +55,7 @@ exports.getConcept = async (req, res) => {
 // METHOD: POST
 // ENDPOINT: /api/v1/concepts
 // ============================================================
-exports.createConcept = async (req, res) => {
+const createConcept = async (req, res) => {
   try {
     const concept = await Concept.create(req.body);
 
@@ -85,12 +85,12 @@ exports.createConcept = async (req, res) => {
 // METHOD: PUT
 // ENDPOINT: /api/v1/concepts/:id
 // ============================================================
-exports.updateConcept = async (req, res) => {
+const updateConcept = async (req, res) => {
   try {
     const concept = await Concept.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
-      overwrite: true // This ensures a complete replacement of the document
+      overwrite: true
     });
 
     if (!concept) {
@@ -111,4 +111,77 @@ exports.updateConcept = async (req, res) => {
       error: 'Server Error: Could not replace concept'
     });
   }
+};
+
+// ============================================================
+// ROUTE #5: Update specific concept fields
+// METHOD: PATCH
+// ENDPOINT: /api/v1/concepts/:id
+// ============================================================
+const patchConcept = async (req, res) => {
+  try {
+    const concept = await Concept.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+
+    if (!concept) {
+      return res.status(404).json({
+        success: false,
+        error: 'Concept not found'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Concept updated successfully',
+      data: concept
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server Error: Could not update concept'
+    });
+  }
+};
+
+// ============================================================
+// ROUTE #6: Delete concept record
+// METHOD: DELETE
+// ENDPOINT: /api/v1/concepts/:id
+// ============================================================
+const deleteConcept = async (req, res) => {
+  try {
+    const concept = await Concept.findByIdAndDelete(req.params.id);
+
+    if (!concept) {
+      return res.status(404).json({
+        success: false,
+        error: 'Concept not found'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Concept deleted successfully',
+      data: {}
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server Error: Could not delete concept'
+    });
+  }
+};
+
+// ============================================================
+// EXPORTS
+// ============================================================
+module.exports = {
+  getConcepts,
+  getConcept,
+  createConcept,
+  updateConcept,
+  patchConcept,
+  deleteConcept
 };
